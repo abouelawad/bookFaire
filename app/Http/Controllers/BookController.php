@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Book;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Validator;
+use League\CommonMark\Inline\Element\Image;
 
 class BookController extends Controller
 {
@@ -29,9 +32,26 @@ class BookController extends Controller
     {
         // dd($request->all());
 
+        $validator = $request->validate([
+
+                'bookName' => 'required|max:191|min:3',
+                'bookDesc' => 'required|max:1000|min:5',
+                'image' => 'required|image|max:10240'
+            ]
+        );
+        #imageUpLoad
+        $image = $request->file('image');
+        $imageName = time() . $image->getClientOriginalName();
+        $img = \Image::make($image->getRealPath());
+        $img->resize(350, 350);
+        $img->save(public_path('asset/images/books/' . $imageName));
+    
+       
+
         $book = new Book();
         $book->name = $request->bookName;
         $book->desc = $request->bookDesc;
+        $book->image = $imageName; // NOTE TO my Self
         $book->save();
 
         return redirect('books/show/'.$book->id);
@@ -45,8 +65,20 @@ class BookController extends Controller
 
     public function update($id , Request $request)
     {
-
-        // dd($id);
+        #VALIDATION
+        $validator = \Validator::make(
+            $request->all(),
+            [
+                'bookName' => 'required|max:191|min:3',
+                'bookDesc' => 'required|max:1000|min:5'
+            ]
+        );
+        if ($validator->fails()) {
+            return redirect('books/edit/'.$id)
+            ->withErrors($validator)
+            ->withInput();
+        }
+        #Call The Book From DB
         $book = Book::findorfail($id);
         $book->name = $request->bookName;
         $book->desc = $request->bookDesc;

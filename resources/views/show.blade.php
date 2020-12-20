@@ -7,5 +7,7 @@
   <h3 >{{$book->name}}</h3>
   <p  >{{$book->desc}}</p>
 
+  <img class="img-fluid" src="{{ asset('asset/images/books/'.$book->image) }}" width="350" height="350">
+
   
 @endsection
