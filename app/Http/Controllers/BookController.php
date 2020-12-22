@@ -33,7 +33,6 @@ class BookController extends Controller
         // dd($request->all());
 
         $validator = $request->validate([
-
                 'bookName' => 'required|max:191|min:3',
                 'bookDesc' => 'required|max:1000|min:5',
                 'image' => 'required|image|max:10240'
