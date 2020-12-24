@@ -16,14 +16,22 @@
   <form action="{{url('books/store')}}" method="post" enctype="multipart/form-data">
     @csrf
 
-    {{-- <div class="form-group"> --}}
+  
     <input class="form-control" type="text" value="{{ old('bookName') }}" name="bookName" id="name"><br>
 
     <input class="form-control" type="text" value="{{ old('bookDesc') }}" name="bookDesc" id="desc"><br>
 
     <input class="form-control" type="file" name="image" id="image"><br>
-{{-- </div> --}}
-    <input type="submit" name="" value="add book">
+    <select name="author_id" id="" class="form-control ">
+
+        @foreach ($authors as $author)
+        <option value="{{ $author->id }}">{{ $author->name }}</option>
+        {{-- <option value="1">sadfgaf</option> --}}
+        @endforeach
+    </select>
+    <br>
+
+    <input type="submit" name="" value="add book" class="btn btn-primary">
   </form>
 </div>
 

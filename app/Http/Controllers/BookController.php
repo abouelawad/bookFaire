@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Author;
 use App\Book;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -20,12 +21,14 @@ class BookController extends Controller
     public function show($id)
     {
         $book = Book::where('id',$id)->first();
-        return view('show', compact('book'));
+        return view('Books.show', compact('book'));
     }
 
     public function create()
     {
-        return view('create');
+        $authors = Author::get();
+
+        return view('Books.create' , compact('authors'));
     }
 
     public function store(Request $request)
@@ -34,23 +37,24 @@ class BookController extends Controller
 
         $validator = $request->validate([
                 'bookName' => 'required|max:191|min:3',
-                'bookDesc' => 'required|max:1000|min:5',
-                'image' => 'required|image|max:10240'
+                'bookDesc' => 'required|max:1000|min:5'
+                // 'image' => 'required|image|max:10240'
             ]
         );
         #imageUpLoad
-        $image = $request->file('image');
-        $imageName = time() . $image->getClientOriginalName();
-        $img = \Image::make($image->getRealPath());
-        $img->resize(350, 350);
-        $img->save(public_path('asset/images/books/' . $imageName));
+        // $image = $request->file('image');
+        // $imageName = time() . $image->getClientOriginalName();
+        // $img = \Image::make($image->getRealPath());
+        // $img->resize(350, 350);
+        // $img->save(public_path('asset/images/books/' . $imageName));
     
        
 
         $book = new Book();
         $book->name = $request->bookName;
         $book->desc = $request->bookDesc;
-        $book->image = $imageName; // NOTE TO my Self
+        $book->author_id = $request->author_id;
+        // $book->image = $imageName; // NOTE TO my Self to remember
         $book->save();
 
         return redirect('books/show/'.$book->id);
@@ -59,7 +63,7 @@ class BookController extends Controller
     public function edit($id)
     {
         $book = Book::where('id',$id)->first();
-        return view('edit',compact('book'));
+        return view('Books.edit',compact('book'));
     }
 
     public function update($id , Request $request)

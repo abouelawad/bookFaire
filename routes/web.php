@@ -24,5 +24,14 @@ Route::get('books/edit/{id}', "BookController@edit" );
 Route::post('books/update/{id}', "BookController@update" );
 Route::get('books/delete/{id}', "BookController@delete" );
 
+Route::get('authors' , 'AuthorController@index');
+Route::get('authors/show/{id}' , 'AuthorController@show');
+Route::get('authors/create' , 'AuthorController@create');
+Route::post('authors/store' , 'AuthorController@store');
+
+// login
+Route::get('users/register' , 'UserController@register');
+Route::post('users/store' , 'UserController@store');
+
 
 Route::get('/books/show/{id}'  , 'BookController@show');
