@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Author;
 use App\Book;
+use App\Author;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Intervention\Image\Facades\Image; // image class
 use Illuminate\Support\Facades\Validator;
-use League\CommonMark\Inline\Element\Image;
 
 class BookController extends Controller
 {
@@ -42,11 +42,11 @@ class BookController extends Controller
             ]
         );
         #imageUpLoad
-        // $image = $request->file('image');
-        // $imageName = time() . $image->getClientOriginalName();
-        // $img = \Image::make($image->getRealPath());
-        // $img->resize(350, 350);
-        // $img->save(public_path('asset/images/books/' . $imageName));
+        $image = $request->file('image');
+        $imageName = time() . $image->getClientOriginalName();
+        $img = Image::make($image->getRealPath());
+        $img->resize(350, 350);
+        $img->save(public_path('asset/images/books/' . $imageName));
     
        
 
@@ -54,7 +54,7 @@ class BookController extends Controller
         $book->name = $request->bookName;
         $book->desc = $request->bookDesc;
         $book->author_id = $request->author_id;
-        // $book->image = $imageName; // NOTE TO my Self to remember
+        $book->image = $imageName; // NOTE TO my Self to remember
         $book->save();
 
         return redirect('books/show/'.$book->id);
@@ -69,7 +69,7 @@ class BookController extends Controller
     public function update($id , Request $request)
     {
         #VALIDATION
-        $validator = \Validator::make(
+        $validator = Validator::make(
             $request->all(),
             [
                 'bookName' => 'required|max:191|min:3',

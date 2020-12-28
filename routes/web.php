@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,21 +16,41 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('home');
 // });
-Route::get('/books'       , 'BookController@index');
-Route::get('books/create' , 'BookController@create');
-Route::post('books/store' , 'BookController@store');
+# IsAdmin MIDDLEWARE
+Route::middleware(['IsAdmin'])->group(function () {
+  #books create from admin
+    Route::get('books/create' , 'BookController@create');
+    Route::post('books/store' , 'BookController@store');
+    #authors create from admin
+    Route::get('authors/create' , 'AuthorController@create');
+    Route::post('authors/store' , 'AuthorController@store');
+});
+
+# Error Page
+Route::get('error', function(){return "ERROR NOT AUTH";});
+
+#books routes
+Route::get('/books', 'BookController@index');
 Route::get('books/edit/{id}', "BookController@edit" );
 Route::post('books/update/{id}', "BookController@update" );
 Route::get('books/delete/{id}', "BookController@delete" );
+Route::get('/books/show/{id}'  , 'BookController@show');
 
+#authors routes
 Route::get('authors' , 'AuthorController@index');
 Route::get('authors/show/{id}' , 'AuthorController@show');
-Route::get('authors/create' , 'AuthorController@create');
-Route::post('authors/store' , 'AuthorController@store');
 
-// login
+// Register and login
 Route::get('users/register' , 'UserController@register');
 Route::post('users/store' , 'UserController@store');
+Route::get('users/login' , 'UserController@login');Route::post('users/handelLogin',
+'UserController@handelLogin');
 
+#Dashboard
+Route::get('dashboard','HomeController@dashboard');
 
-Route::get('/books/show/{id}'  , 'BookController@show');
+#Github links
+
+Route::get('auth/github', 'UserController@github' );
+
+Route::get('auth/callback', 'UserController@githubCallBack' );
