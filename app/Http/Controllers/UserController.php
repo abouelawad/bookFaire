@@ -68,9 +68,9 @@ class UserController extends Controller
         $github_user = Socialite::driver('github')->user();
 
         
-        $dbUser = User::where('social_token', $github_user->token)->first();
+        $dbUser = User::where('email', $github_user->email)->first();
 
-        // dd($user);
+        // dd($github_user);
         if($dbUser == null)
         {
             $newUser = new User;

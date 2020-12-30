@@ -18,7 +18,10 @@
     <input class="form-control" type="email"  name="email" id="name"><br>
     <input class="form-control" type="password"  name="password" id="desc"><br>
     <input type="submit" name="" value="Login" class="btn btn-primary">
-  </form>
+</form><br>
+<h5>OR Login with </h5>
+<br>
+<a href="{{ url('auth/github') }}" class="btn btn-primary">Github</a>
 </div>
 
 @endsection

@@ -20,6 +20,9 @@
     <input type="submit" name="" value="Register" class="btn btn-primary">
   </form>
 </div>
+<h5>OR Login with </h5>
+<br>
+<a href="{{ url('auth/github') }}" class="btn btn-primary">Github</a>
 
 @endsection
 

@@ -14,6 +14,7 @@ class BookController extends Controller
     public function index()
     {
         $books = Book::get();
+
         return view('home', compact('books'));
         // return view('home', ['books' => $books]); //? Another Way To Send Data
     }
